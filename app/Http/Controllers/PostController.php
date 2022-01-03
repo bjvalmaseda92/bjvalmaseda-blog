@@ -52,7 +52,6 @@ class PostController extends Controller
 
         $post->tags()->sync($tags);
 
-        //dd($post->tags()->count());
         return redirect(route("post.index"));
     }
 
@@ -97,6 +96,12 @@ class PostController extends Controller
             "slug" => Str::slug($request->title),
         ]);
 
+        $tags = [];
+        foreach ($request->tags as $tag) {
+            $tags[] = Tag::firstOrCreate(["name" => $tag])->id;
+        }
+
+        $post->tags()->sync($tags);
         return redirect(route("post.edit", $post));
     }
 
