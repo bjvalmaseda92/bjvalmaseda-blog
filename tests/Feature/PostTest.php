@@ -21,6 +21,7 @@ class PostTest extends TestCase
                 "title" => "Title Post",
                 "body" => "Body text",
                 "image" => "image.jpg",
+                "tags" => ["tag1", "tag2" . "tag3"],
             ])
         )->assertRedirect(route("post.index"));
 
@@ -30,6 +31,10 @@ class PostTest extends TestCase
             "slug" => Str::slug("Title Post"),
             "image" => "image.jpg",
         ]);
+        $this->assertDatabaseHas("tags", ["name" => "tag1"])->assertDatabaseHas(
+            "tags",
+            ["name" => "tag2"]
+        );
     }
 
     /** @test */
