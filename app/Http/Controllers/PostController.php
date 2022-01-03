@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use App\Models\Post;
+use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
@@ -36,7 +37,13 @@ class PostController extends Controller
      */
     public function store(StorePostRequest $request)
     {
-        //
+        Post::create([
+            "title" => $request->title,
+            "body" => $request->body,
+            "image" => $request->image,
+            "slug" => Str::slug($request->title),
+        ]);
+        return redirect(route("post.index"));
     }
 
     /**
@@ -70,7 +77,17 @@ class PostController extends Controller
      */
     public function update(UpdatePostRequest $request, Post $post)
     {
-        //
+        if ($request->file("image")) {
+            $post->image = $request->image;
+        }
+
+        $post->update([
+            "title" => $request->title,
+            "body" => $request->body,
+            "slug" => Str::slug($request->title),
+        ]);
+
+        return redirect(route("post.edit", $post));
     }
 
     /**
@@ -81,6 +98,8 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        $post->delete();
+
+        return redirect(route("post.index"));
     }
 }

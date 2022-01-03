@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,7 +18,4 @@ Route::get("/", function () {
     return view("pages.home");
 })->name("home");
 
-Route::get("/post", function () {
-    $header = "Post Title";
-    return view("pages.post", compact("header"));
-});
+Route::resource("post", PostController::class)->except("show");

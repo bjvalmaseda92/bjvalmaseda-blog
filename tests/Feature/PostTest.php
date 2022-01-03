@@ -15,35 +15,35 @@ class PostTest extends TestCase
     public function can_crete_post()
     {
         $this->withExceptionHandling();
-        $this->get(route("post.crete"))->assertStatus(200);
+        $this->get(route("post.create"))->assertStatus(200);
         $this->post(
             route("post.store", [
                 "title" => "Title Post",
                 "body" => "Body text",
+                "image" => "image.jpg",
             ])
-        )->assertRedirect("post.index");
+        )->assertRedirect(route("post.index"));
 
         $this->assertDatabaseHas("posts", [
             "title" => "Title Post",
             "body" => "Body text",
             "slug" => Str::slug("Title Post"),
+            "image" => "image.jpg",
         ]);
     }
 
     /** @test */
-    public function can_uddate_post()
+    public function can_update_post()
     {
         $this->withExceptionHandling();
         $post = Post::factory()->create();
         $this->get(route("post.edit", $post))->assertStatus(200);
-        $this->patch(
-            route("post.update", [
-                "title" => "Title update",
-                "body" => "Body Update",
-            ])
-        )->assertStatus(200);
+        $this->patch(route("post.update", $post), [
+            "title" => "Title update",
+            "body" => "Body Update",
+        ])->assertRedirect(route("post.edit", $post));
 
-        $this->assertDatabaseHas("post", [
+        $this->assertDatabaseHas("posts", [
             "title" => "Title update",
             "body" => "Body Update",
             "slug" => Str::slug("Title update"),
