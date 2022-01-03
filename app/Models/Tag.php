@@ -6,19 +6,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class Post extends Model
+class Tag extends Model
 {
     use HasFactory;
 
-    protected $fillable = ["title", "body", "image", "slug"];
-
     /**
-     * The tag that belong to the Post
+     * The posts that belong to the Tag
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function tags(): BelongsToMany
+    public function posts(): BelongsToMany
     {
-        return $this->belongsToMany(Tag::class, "posts_tags");
+        return $this->belongsToMany(Post::class, "posts_tags");
     }
 }
