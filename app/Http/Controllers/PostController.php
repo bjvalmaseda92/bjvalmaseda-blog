@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use App\Models\Post;
+use App\Models\Tag;
 use Illuminate\Support\Str;
 
 class PostController extends Controller
@@ -37,12 +38,21 @@ class PostController extends Controller
      */
     public function store(StorePostRequest $request)
     {
-        Post::create([
+        $post = Post::create([
             "title" => $request->title,
             "body" => $request->body,
             "image" => $request->image,
             "slug" => Str::slug($request->title),
         ]);
+
+        $tags = [];
+        foreach ($request->tags as $tag) {
+            $tags[] = Tag::firstOrCreate(["name" => $tag])->id;
+        }
+
+        $post->tags()->sync($tags);
+
+        //dd($post->tags()->count());
         return redirect(route("post.index"));
     }
 

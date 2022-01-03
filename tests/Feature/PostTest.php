@@ -12,7 +12,7 @@ class PostTest extends TestCase
 {
     use RefreshDatabase;
     /** @test */
-    public function can_crete_post()
+    public function can_create_post()
     {
         $this->withExceptionHandling();
         $this->get(route("post.create"))->assertStatus(200);
@@ -21,7 +21,7 @@ class PostTest extends TestCase
                 "title" => "Title Post",
                 "body" => "Body text",
                 "image" => "image.jpg",
-                "tags" => ["tag1", "tag2" . "tag3"],
+                "tags" => ["tag1", "tag2", "tag3"],
             ])
         )->assertRedirect(route("post.index"));
 
@@ -31,10 +31,8 @@ class PostTest extends TestCase
             "slug" => Str::slug("Title Post"),
             "image" => "image.jpg",
         ]);
-        $this->assertDatabaseHas("tags", ["name" => "tag1"])->assertDatabaseHas(
-            "tags",
-            ["name" => "tag2"]
-        );
+        $post = Post::whereSlug(Str::slug("Title Post"))->firstOrFail();
+        $this->assertEquals(3, $post->tags()->count());
     }
 
     /** @test */
