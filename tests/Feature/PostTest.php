@@ -31,6 +31,7 @@ class PostTest extends TestCase
             "slug" => Str::slug("Title Post"),
             "image" => "image.jpg",
         ]);
+
         $post = Post::whereSlug(Str::slug("Title Post"))->firstOrFail();
         $this->assertEquals(3, $post->tags()->count());
     }
@@ -44,6 +45,7 @@ class PostTest extends TestCase
         $this->patch(route("post.update", $post), [
             "title" => "Title update",
             "body" => "Body Update",
+            "tags" => ["tag1", "tag2"],
         ])->assertRedirect(route("post.edit", $post));
 
         $this->assertDatabaseHas("posts", [
@@ -51,6 +53,8 @@ class PostTest extends TestCase
             "body" => "Body Update",
             "slug" => Str::slug("Title update"),
         ]);
+
+        $this->assertEquals(2, $post->tags()->count());
     }
 
     /** @test */
