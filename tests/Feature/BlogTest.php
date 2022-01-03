@@ -8,6 +8,7 @@ use Tests\TestCase;
 
 class BlogTest extends TestCase
 {
+    use RefreshDatabase;
     /**
      * A basic feature test example.
      *
@@ -15,6 +16,7 @@ class BlogTest extends TestCase
      */
     public function test_render_home_page()
     {
+        $this->withExceptionHandling();
         $response = $this->get("/");
 
         $response->assertStatus(200);
