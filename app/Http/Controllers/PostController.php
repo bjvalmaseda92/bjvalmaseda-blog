@@ -46,7 +46,8 @@ class PostController extends Controller
         ]);
 
         $tags = [];
-        foreach ($request->tags as $tag) {
+        $requestTags = $this->strToArray($request->tags);
+        foreach ($requestTags as $tag) {
             $tags[] = Tag::firstOrCreate(["name" => $tag])->id;
         }
 
@@ -116,5 +117,10 @@ class PostController extends Controller
         $post->delete();
 
         return redirect(route("post.index"));
+    }
+
+    protected function strToArray($str)
+    {
+        return explode(",", $str);
     }
 }

@@ -1,4 +1,4 @@
-<div x-data @tags-update="{tagList: $event.detail.tags}" data-tags='[{{$tags ?? ''}}]' class="max-w-full">
+<div x-data @tags-update="{tags: $event.detail.tags}" data-tags='[{{$tags ?? ''}}]' class="max-w-full">
 
     <div x-data="tagSelect()" @click.away="clearSearch()" @keydown.escape="clearSearch()">
         <div class="relative" @keydown.enter.prevent="addTag(textInput)">
@@ -14,7 +14,7 @@
                     </div>
                 </div>
             </div>
-            <input type="hidden" x-model="tags" id="tagsList" name="tagsList[]" multiple="multiple" />
+            <input type="hidden" x-model="tags" id="tags" name="tags" multiple="multiple" />
             <!-- selections -->
             <template x-for="(tag, index) in tags">
                 <div class="bg-indigo-100 inline-flex items-center text-sm rounded mt-2 mr-1">
